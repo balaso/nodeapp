@@ -19,7 +19,7 @@ function getAllRoles(req, res, next) {
 }
 
 function addRole(req, res, next) {
-    roleService.addRole(req.body)
+    roleService.addRole(req, res)
         .then((roles) => res.json(roles))
         .catch(err => next(err));
 }

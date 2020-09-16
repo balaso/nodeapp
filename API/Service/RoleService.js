@@ -15,29 +15,23 @@ async function getAll() {
 
 
 
-async function addRole(roleParam) {
+async function addRole(req, res) {
+
+    let roleParam = req.body;
     let pages = roleParam.pages ? roleParam.pages : []
     await Role.findOne( { name : roleParam.name }).then( roleInfo => {
         if(roleInfo !== null){
             if(roleInfo.name === roleParam.name){
                 throw 'Role "' + roleParam.name + '" is already defined';
-            }else{
-        Role.findByIdAndUpdate(roleInfo._id, { $push: { pages : "5f60e68e3827fdbd757b7e05"} },
-                { upsert: true, new: true, useFindAndModify: false }, 
-                                    function (err, roles) { 
-                    if (err){ 
-                        console.log(err) 
-                    } 
-                    else{ 
-                        console.log("Updated Role : ", roles); 
-                    }
-                    return roles; 
-                }); 
             }
         }
     });
 
+    roleParam.createdBy = req.userInfo.email;
+
     const role = new Role(roleParam);
+    console.log("  New ");
+    console.log(role);
 
     return await role.save().then(savedRole => {
         return savedRole;

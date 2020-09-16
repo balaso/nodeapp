@@ -42,25 +42,8 @@ async function register(userParam) {
 
     // save user
     return await user.save().then(saveUser => {
-        
-        let role = {
-            "_id" : "5f60c6f00818b7169d0ae408"
-        };
-        console.log(user.roles);
-
-    let updatedUser = db.User.findByIdAndUpdate(saveUser._id, { $push: { roles : role._id} },
-        { upsert: true, new: true, useFindAndModify: false }, 
-                            function (err, docs) { 
-            if (err){ 
-                console.log(err) 
-            } 
-            else{ 
-                console.log("Updated User : ", docs); 
-            }
-            return docs; 
-        }); 
-        return updatedUser;
-      });
+        return saveUser;
+    });
 }
 
 async function authenticate(req, res) {
