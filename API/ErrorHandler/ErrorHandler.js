@@ -28,8 +28,16 @@ function errorHandler(err, req, res, next) {
             success: false,
              "title" : "Forbidden Request",
              "message": err.message ? err.message : "",
-             "status" : 403
            })
+    }
+
+    if (err.name === 'DependencyError') {
+        return res.status(500).json({ 
+            success: false, 
+            message: err.message ? err.message : "",
+            developerMessage : err.developerMessage ? err.developerMessage : "", 
+            "status" : 500
+        });
     }
 
     // default to 500 server error

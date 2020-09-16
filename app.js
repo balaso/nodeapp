@@ -17,10 +17,11 @@ app.use(jwt());
 //const router = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', require("./API/Controller/AccountController"));
 
+app.use('/api', require("./API/Controller/AccountController"));
 app.use('/api', require("./API/Controller/RoleController"));
 app.use('/api', require("./API/Controller/UserController"));
+app.use('/api', require("./API/Controller/PageController"));
 
 
 

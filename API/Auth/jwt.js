@@ -22,13 +22,14 @@ function jwt() {
 async function isRevoked(req, payload, done) {
     let currentUser = await userService.getById(payload.sub);
     
-    let isSysRole = checkUserHaveSysRole(currentUser);
-    currentUser["isSysRole"] = isSysRole;
-    req.userInfo = currentUser;
-    req.isSysRole = isSysRole
     // revoke token if user no longer exists
     if (!currentUser) {
         return done(null, true);
+    }else{
+        let isSysRole = checkUserHaveSysRole(currentUser);
+        currentUser["isSysRole"] = isSysRole;
+        req.userInfo = currentUser;
+        req.isSysRole = isSysRole
     }
     done();
 };
@@ -36,7 +37,7 @@ async function isRevoked(req, payload, done) {
 function checkUserHaveSysRole(currentUser){
     let isSysRole = false;
     for(var i = 0; i < currentUser.roles.length; i++) {
-                
+               
         let role = new Role(currentUser.roles[i]);
         if(role.isSysRole){
             isSysRole = true;

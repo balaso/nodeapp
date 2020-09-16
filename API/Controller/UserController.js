@@ -12,6 +12,8 @@ router.delete('/users/:username', deleteByUserName);
 router.get('/current', getCurrentUser);
 router.put('/users', updateUser);
 
+router.get('/users/roles', getUserRoles);
+
 module.exports = router;
 
 function getAll(req, res, next) {
@@ -22,7 +24,6 @@ function getAll(req, res, next) {
 
 
 function getByUserName(req, res, next) {
-    console.log(req.params);
 userService.getByUserName(req.params.username)
     .then(user => user ? res.json(user) : res.sendStatus(404))
     .catch(err => next(err));
@@ -49,5 +50,11 @@ function getCurrentUser(req, res, next) {
 function updateUser(req, res, next) {
     userService.update(req, res)
         .then(() => res.status(200).json({success: true, message:"user updated successfully"}))
+        .catch(err => next(err));
+}
+
+function getUserRoles(req, res, next) {
+    authoritiesService.getAll()
+        .then(users => res.json(users))
         .catch(err => next(err));
 }

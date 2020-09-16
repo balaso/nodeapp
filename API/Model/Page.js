@@ -10,6 +10,10 @@ const schema = new Schema({
         type: String,
         default: ""
     },
+    url :{
+        type: String,
+        required: [true, 'URL is required']
+    },
     createdBy: {
         type: String,
         default: ""

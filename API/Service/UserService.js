@@ -23,7 +23,6 @@ async function getByEmail(emailID) {
 }
 
 async function getByUserName(userId) {
-    console.log(userId);
     return await User.findOne({username: userId} ).select(UserDTO).populate("roles", "-_id -__v");
 }
 
