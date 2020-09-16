@@ -67,7 +67,7 @@ async function authenticate(req, res) {
     const { username, password } = req.body;
     const userDTO = "_id id firstName lastName imageUrl roles password activated activationKey";
 
-    const user = await User.findOne({ "username": username }).select(userDTO).populate({
+    const user = await User.findOne({ $or: [ { "username": username }, { "email" : username } ]}).select(userDTO).populate({
         path: 'roles',
         model: 'Role',
         select: { '__v': 0},

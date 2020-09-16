@@ -43,17 +43,31 @@ async function getAll(req, res) {
 }
 
 async function _delete(id) {
+    const user = await User.findById(id);
+
+     if(req.user.username !== user.username && !req.isSysRole){
+        var e = new Error
+        e.name = 'Forbidden';
+        e.message = "You can't delete another User Info";
+        throw e;
+    }
     await User.findByIdAndRemove(id);
 }
 
 async function deleteByUserName(req, res) {
     
+    const user = await User.find({ username : req.params.username});
+
+     if(req.user.username !== req.params.username && !req.isSysRole){
+        var e = new Error
+        e.name = 'Forbidden';
+        e.message = "You can't delete another User Info";
+        throw e;
+    }
+
     return await User.deleteOne({ username : req.params.username}).then(status =>{
       const { deletedCount } = status;
       if(deletedCount > 0){
-        res.setHeader('Content-Type', 'application/json');
-        res.json({ "success": true, message : "User Deleted Successfully"});
-        res.send();
       }else{
           throw new Error("User not Available");
       }
@@ -66,10 +80,8 @@ async function update(req, res) {
     const userParam = req.body;
     const user = await User.findById(id);
 
-    console.log(req.userInfo);
-
-     if(req.user.username !== user.username){
-        var e = new Error(""); // e.name is 'Error'
+     if(req.user.username !== user.username && !req.isSysRole){
+        var e = new Error
         e.name = 'Forbidden';
         e.message = "You can't update another User Info";
         throw e;
@@ -82,11 +94,24 @@ async function update(req, res) {
     // validate
     if (!user) { throw 'User not found';}
 
-   
-
     if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
+
+    if (user.email !== userParam.email && await User.findOne({ username: userParam.username })) {
+        throw 'Email "' + userParam.email + '" is already taken';
+    }
+
+    await User.findOne( { $or: [ { username: userParam.username }, { email : userParam.email } ]}).then( userInfo => {
+        if(userInfo !== null){
+            if(userInfo.username === userParam.username){
+                throw 'Username "' + userParam.username + '" is already taken';
+            }else if(userInfo.email === userParam.email){
+                throw 'Email "' + userParam.email + '" is already taken';
+            }
+        }
+    });
+
 
     // hash password if it was entered
     if (userParam.password) {

@@ -24,10 +24,8 @@ async function isRevoked(req, payload, done) {
     
     let isSysRole = checkUserHaveSysRole(currentUser);
     currentUser["isSysRole"] = isSysRole;
-   
-    currentUser["check"] = "false";
-    console.log(currentUser);
     req.userInfo = currentUser;
+    req.isSysRole = isSysRole
     // revoke token if user no longer exists
     if (!currentUser) {
         return done(null, true);

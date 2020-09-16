@@ -30,13 +30,13 @@ userService.getByUserName(req.params.username)
 
 function _delete(req, res, next) {
     userService.delete(req.params.id)
-        .then(() => res.json({}))
+        .then(() => res.json({ "success": true, message : "User Deleted Successfully"}))
         .catch(err => next(err));
 }
 
 function deleteByUserName(req, res, next) {
     userService.deleteByUserName(req,res)
-        .then(() => res.json({}))
+        .then(() => res.json({ "success": true, message : "User Deleted Successfully"}))
         .catch(err => next(err));
 }
 
