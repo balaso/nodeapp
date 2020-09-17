@@ -1,4 +1,8 @@
 const winston = require('winston')
+/*
+const Logger = require("./API/LoggerService");
+const loggerService = new Logger('app');
+*/
 dateFormat = () => {
   return new Date(Date.now()).toUTCString()
 }

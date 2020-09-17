@@ -9,8 +9,8 @@ const errorHandlers = require("./API/ErrorHandler/ErrorHandler");
 var rfs = require('rotating-file-stream') // version 2.x
 const logger = require("./API/logger");
 
-const Logger = require("./API/LoggerService");
-const loggerService = new Logger('app');
+const requestIp = require('request-ip');
+
 
 var fs = require('fs')
 var path = require('path')
@@ -29,11 +29,13 @@ const jwt = require("./API/Auth/jwt");
 const app = express();
 app.all('*', function(request, res, next){
     const { method, url, headers, body } = request;
-    console.log(method);
-    console.log(url);
-    console.log(headers);
-    logger.log("info", method + "  " + url + "   " + headers['user-agent'] );
-    console.log('(2) route middleware for all method and path pattern "*", executed first and can do stuff before going next');
+ 
+    const clientIp = requestIp.getClientIp(request);
+    const { authorization } = headers;
+    if(authorization){
+        console.log("  Auth "+ authorization.replace("Bearer ", ""));
+    }
+    logger.log("info", method + "  " + url + "   " + headers['user-agent'] + " IP "+ clientIp);
     next();
 });
 app.use(morgan('combined', { stream: accessLogStream }));
@@ -56,7 +58,6 @@ const port = process.env.NODE_ENV === 'production' ? 3006 : 4444;
 
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
-    loggerService.info("lofff");
     logger.log("info", "Server listening on port " + port);
 });
 
