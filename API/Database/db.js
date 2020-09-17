@@ -27,3 +27,60 @@ db = module.exports = {
     Role: require("../Model/Role"),
     Page: require("../Model/Page")
 };
+
+initialize();
+
+async function initialize() {
+    console.log(" <---- Initialize Database ---> ");
+    
+    /*** Get Admin Config from config file ***/
+    const adminUserConfig = config.adminUser;
+
+    const roleParam = {
+        "name": "Admin",
+        "isSysRole": true,
+        "createdBy" : adminUserConfig.email
+    }
+    let adminRole = "";
+    /*** check  admin role is in db if not then insert ***/
+    adminRole = await db.Role.findOne( { name : roleParam.name }).then( roleInfo => {
+        return roleInfo;
+    });
+    if(adminRole === null){
+        const role = new db.Role(roleParam);
+        adminRole = await role.save().then(savedRole => {
+            return savedRole;
+        });
+    }
+
+    
+    
+    /***  check admin User in system if not then insert ***/
+    let adminUserParam = {
+        "username": adminUserConfig.username,
+        "email": adminUserConfig.email,
+        "password": adminUserConfig.password,
+        "createdBy" : adminUserConfig.email,
+        "activated" : true,
+        "firstName" : "Admin",
+        "langKey": "en",
+        "roles":[]
+    }
+    
+    adminUserParam.roles.push(adminRole);
+    
+    let adminUser = await db.User.findOne( { $or: [ { username: adminUserParam.username }, { email : adminUserParam.email } ]}).then( userInfo => {
+        return userInfo;
+    });
+    
+    if(adminUser === null){
+        let admin = new db.User(adminUserParam);
+        admin.password = admin.generateHashPassword(admin.password);
+        adminUser = await admin.save().then(savedUser => {
+            return savedUser;
+        });
+    }
+
+    console.log(" Admin user   --->  "+ JSON.stringify(adminUser.toJSON()));
+    console.log(" <---- Initialize Completed  ----> ")
+}

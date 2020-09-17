@@ -11,6 +11,7 @@ router.delete('/:id', _delete);
 router.delete('/users/:username', deleteByUserName);
 router.get('/current', getCurrentUser);
 router.put('/users', updateUser);
+router.post('/users', isAllowed("Admin"), createUser);
 
 router.get('/users/roles', getUserRoles);
 
@@ -30,7 +31,7 @@ userService.getByUserName(req.params.username)
 }
 
 function _delete(req, res, next) {
-    userService.delete(req.params.id)
+    userService.delete(req, res, req.params.id)
         .then(() => res.json({ "success": true, message : "User Deleted Successfully"}))
         .catch(err => next(err));
 }
@@ -42,9 +43,10 @@ function deleteByUserName(req, res, next) {
 }
 
 function getCurrentUser(req, res, next) {
-    userService.getById(req.user.sub)
+    res.json(req.userInfo);
+/*    userService.getById(req.user.sub)
         .then(user => user ? res.json(user) : res.sendStatus(404))
-        .catch(err => next(err));
+        .catch(err => next(err));*/
 }
 
 function updateUser(req, res, next) {
@@ -56,5 +58,11 @@ function updateUser(req, res, next) {
 function getUserRoles(req, res, next) {
     authoritiesService.getAll()
         .then(users => res.json(users))
+        .catch(err => next(err));
+}
+
+function createUser(req, res, next) {
+    userService.create(req, res)
+        .then((user) => res.json({status : true, data: user}))
         .catch(err => next(err));
 }

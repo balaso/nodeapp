@@ -34,7 +34,7 @@ async function register(userParam) {
     const user = new User(userParam);
     // hash password
     if (userParam.password) {
-        user.password = bcrypt.hashSync(userParam.password, 10);
+    user.password = user.generateHashPassword(userParam.password);
     }
 
     var message = "Hi "+ user.username + "<br/>"
@@ -48,8 +48,9 @@ async function register(userParam) {
 
 async function authenticate(req, res) {
     const { username, password } = req.body;
-    const userDTO = "_id id firstName lastName imageUrl roles password activated activationKey";
+    const userDTO = "_id id username email firstName lastName imageUrl roles password activated activationKey";
 
+   
     const user = await User.findOne({ $or: [ { "username": username }, { "email" : username } ]}).select(userDTO).populate({
         path: 'roles',
         model: 'Role',
@@ -67,11 +68,15 @@ async function authenticate(req, res) {
             "link": user.activationKey
         });
     }
-    if (user && bcrypt.compareSync(password, user.password)) {
+    console.log(" check");
+    if (user && user.comparePassword(password, user.password)) {
         
         let isSysRole = checkUserHaveSysRole(user);
 
-        const { hash, ...userWithoutHash } = user.toObject();
+        const userObj =  user.toObject();
+        delete userObj.password;
+
+        const { hash, ...userWithoutHash } = userObj;
 
         const id_token = jwt.sign({ sub : user.id}, config.jwt.secret, { expiresIn: '7d' });
         

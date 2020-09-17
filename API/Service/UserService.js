@@ -1,6 +1,7 @@
 const db = require("../Database/db");
 const User = db.User;
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const UserDTO = "id login firstName lastName email imageUrl activated langKey createdBy createdDate lastModifiedBy lastModifiedDate authorities";
 
@@ -11,7 +12,8 @@ module.exports = {
     getByUserName,
     delete: _delete,
     deleteByUserName,
-    update
+    update,
+    create
 };
 
 async function getById(id) {
@@ -41,7 +43,7 @@ async function getAll(req, res) {
     return users;
 }
 
-async function _delete(id) {
+async function _delete(req, res, id) {
     const user = await User.findById(id);
 
      if(req.user.username !== user.username && !req.isSysRole){
@@ -126,4 +128,48 @@ async function update(req, res) {
         }
        return updatedUser;
     });
+}
+
+async function create(req, res) {
+    
+    const userParam = req.body;
+    // validate
+    await User.findOne( { $or: [ { username: userParam.username }, { email : userParam.email } ]}).then( userInfo => {
+        if(userInfo !== null){
+            if(userInfo.username === userParam.username){
+                throw 'Username "' + userParam.username + '" is already taken';
+            }else if(userInfo.email === userParam.email){
+                throw 'Email "' + userParam.email + '" is already taken';
+            }
+        }
+    });
+   
+    if(userParam.langKey == null){
+        userParam.langKey = defaultProperties.DEFAULT_LANGUAGE;
+    }
+
+    // Generate a 20 character alpha-numeric token:
+    userParam.activated = true;
+    userParam.resetKey = null;
+    
+    userParam.createdBy = req.userInfo.email;
+
+   const user = new User(userParam);
+    if (userParam.password) {
+        user.password = user.generateHashPassword(userParam.password);
+   }
+
+    // save user
+   const createdUser = await user.save().then(savedUser => {
+        return savedUser;
+    });
+    /*await user.save((err, savedUser) => { 
+        if (err) { 
+            throw "Failed to add user." 
+        } 
+        else { 
+           return savedUser
+        } 
+    });*/
+    return createdUser;
 }

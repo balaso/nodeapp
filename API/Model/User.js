@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcryptjs');
 
-const schema = new Schema({
+const UserSchema = new Schema({
     username : {
         type: String,
         unique: true,
@@ -10,6 +11,8 @@ const schema = new Schema({
     email: {
         type: String,
         unique: true,
+        trim: true,
+        lowercase: true,
         required: [true, 'E-Mail is required']
     },
     password: {
@@ -72,4 +75,18 @@ const schema = new Schema({
     ]
 });
 
-module.exports = mongoose.model('User', schema);
+UserSchema.methods.toJSON = function() {
+    var obj = this.toObject();
+    delete obj.password;
+    return obj;
+}
+
+UserSchema.methods.comparePassword = function(password, comparePassword) { 
+    return bcrypt.compareSync(password, comparePassword)
+};
+
+UserSchema.methods.generateHashPassword = function(password){
+   return bcrypt.hashSync(password, 10);
+}
+
+module.exports = mongoose.model('User', UserSchema);

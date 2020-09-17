@@ -19,8 +19,9 @@ function register(req, res, next) {
 }
 
 function authenticate(req, res, next) {
+    console.log("cg");
     accountService.authenticate(req, res)
-        .then(user => user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
+        .then(user => user ? res.json(user) : res.status(400).json({ status: false, message: 'Username or password is incorrect' }))
         .catch(err => next(err));
 }
 

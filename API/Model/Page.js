@@ -4,14 +4,16 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     name: {
         type: String,
+        unique: true,
         required: [true, 'Name is required']
     },
-    description:{
+    description: {
         type: String,
-        default: ""
+        required: [true, 'Description is required']
     },
     url :{
         type: String,
+        unique: true,
         required: [true, 'URL is required']
     },
     createdBy: {
