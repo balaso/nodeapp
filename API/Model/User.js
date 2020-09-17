@@ -1,19 +1,51 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcryptjs');
+var uniqueValidator = require('mongoose-unique-validator');
+
+var regEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
 const UserSchema = new Schema({
     username : {
         type: String,
         unique: true,
-        required: [true, 'Login is required']
+        required: [true, 'Username is required'],
+        minlength: [4, "`{VALUE}` is shorter than the minimum allowed length (4)"],
+        maxlength: 100,
+        validate: {
+            validator: async function(username) {
+              const user = await this.constructor.findOne({ username });
+              if(user) {
+                if(this.id === user.id) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            },
+            message: props => `The specified User Name ${props.value} is already taken. Choose another one.`
+        }
     },
     email: {
         type: String,
         unique: true,
         trim: true,
         lowercase: true,
-        required: [true, 'E-Mail is required']
+        required: [true, 'E-Mail is required'],
+        match: [regEmail, 'Please fill a valid email address'],
+        validate: {
+            validator: async function(email) {
+              const user = await this.constructor.findOne({ email });
+              if(user) {
+                if(this.id === user.id) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            },
+            message: props => `The specified email address ${props.value} is already taken. Choose another one.`
+          }
     },
     password: {
       type: String,
@@ -88,5 +120,6 @@ UserSchema.methods.comparePassword = function(password, comparePassword) {
 UserSchema.methods.generateHashPassword = function(password){
    return bcrypt.hashSync(password, 10);
 }
+UserSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', UserSchema);

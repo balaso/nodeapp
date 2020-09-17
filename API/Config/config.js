@@ -8,7 +8,7 @@ module.exports.defaultConfig = {
     },
     "adminUser":{
         "username": "Admin",
-        "email": "admin@techbulls.com",
+        "email": "Admin@techbulls.com ",
         "password" : "Admin123"
     }
 }

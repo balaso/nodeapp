@@ -46,7 +46,7 @@ async function getAll(req, res) {
 async function _delete(req, res, id) {
     const user = await User.findById(id);
 
-     if(req.user.username !== user.username && !req.isSysRole){
+     if(req.userInfo.username !== user.username || !req.isSysRole){
         var e = new Error
         e.name = 'Forbidden';
         e.message = "You can't delete another User Info";
@@ -59,7 +59,7 @@ async function deleteByUserName(req, res) {
     
     const user = await User.find({ username : req.params.username});
 
-     if(req.user.username !== req.params.username && !req.isSysRole){
+     if(req.userInfo.username !== req.params.username && !req.isSysRole){
         var e = new Error
         e.name = 'Forbidden';
         e.message = "You can't delete another User Info";
@@ -75,13 +75,13 @@ async function deleteByUserName(req, res) {
     });
 }
 
-async function update(req, res) {
+async function update(req, res, next) {
     
     const id = req.body._id;
     const userParam = req.body;
     const user = await User.findById(id);
 
-     if(req.user.username !== user.username && !req.isSysRole){
+     if(req.userInfo.username !== user.username && !req.isSysRole){
         var e = new Error
         e.name = 'Forbidden';
         e.message = "You can't update another User Info";
@@ -91,10 +91,8 @@ async function update(req, res) {
     if(id === undefined ){
         throw 'User not found';
     }
-
     // validate
     if (!user) { throw 'User not found';}
-
     if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
@@ -102,17 +100,6 @@ async function update(req, res) {
     if (user.email !== userParam.email && await User.findOne({ username: userParam.username })) {
         throw 'Email "' + userParam.email + '" is already taken';
     }
-
-    await User.findOne( { $or: [ { username: userParam.username }, { email : userParam.email } ]}).then( userInfo => {
-        if(userInfo !== null){
-            if(userInfo.username === userParam.username){
-                throw 'Username "' + userParam.username + '" is already taken';
-            }else if(userInfo.email === userParam.email){
-                throw 'Email "' + userParam.email + '" is already taken';
-            }
-        }
-    });
-
 
     // hash password if it was entered
     if (userParam.password) {
@@ -122,28 +109,26 @@ async function update(req, res) {
 
     // copy userParam properties to user
     Object.assign(user, userParam);
-    await user.save(function(err, updatedUser) {
-        if (err) {
-            return res.send();
-        }
-       return updatedUser;
-    });
+    try{
+        user.save(function(err, updatedUser) {
+            if (err) {
+                // TODO : system crash when throw error
+                console.log(" Error occurred "+ err.message);
+                //throw new Error("xvxcv");
+            }
+            return false;
+        });
+    }catch(ex){
+        console.log("hhhh")
+        //next(new Erroerr);
+    }
+   
 }
 
 async function create(req, res) {
     
     const userParam = req.body;
-    // validate
-    await User.findOne( { $or: [ { username: userParam.username }, { email : userParam.email } ]}).then( userInfo => {
-        if(userInfo !== null){
-            if(userInfo.username === userParam.username){
-                throw 'Username "' + userParam.username + '" is already taken';
-            }else if(userInfo.email === userParam.email){
-                throw 'Email "' + userParam.email + '" is already taken';
-            }
-        }
-    });
-   
+    
     if(userParam.langKey == null){
         userParam.langKey = defaultProperties.DEFAULT_LANGUAGE;
     }

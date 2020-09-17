@@ -39,6 +39,7 @@ async function initialize() {
     const roleParam = {
         "name": "Admin",
         "isSysRole": true,
+        "description" : "Admin Role",
         "createdBy" : adminUserConfig.email
     }
     let adminRole = "";
@@ -69,7 +70,7 @@ async function initialize() {
     
     adminUserParam.roles.push(adminRole);
     
-    let adminUser = await db.User.findOne( { $or: [ { username: adminUserParam.username }, { email : adminUserParam.email } ]}).then( userInfo => {
+    let adminUser = await db.User.findOne( { $or: [ { username: adminUserParam.username }]}).then( userInfo => {
         return userInfo;
     });
     

@@ -15,16 +15,6 @@ module.exports = {
 
 async function register(userParam) {
     // validate 
-    await User.findOne( { $or: [ { username: userParam.username }, { email : userParam.email } ]}).then( userInfo => {
-        if(userInfo !== null){
-            if(userInfo.username === userParam.username){
-                throw 'Username "' + userParam.username + '" is already taken';
-            }else if(userInfo.email === userParam.email){
-                throw 'Email "' + userParam.email + '" is already taken';
-            }
-        }
-    });
-
     userParam.activated = false;
     // Generate a 20 character alpha-numeric token:
     userParam.activationKey = randtoken.generate(20);
@@ -34,7 +24,7 @@ async function register(userParam) {
     const user = new User(userParam);
     // hash password
     if (userParam.password) {
-    user.password = user.generateHashPassword(userParam.password);
+         user.password = user.generateHashPassword(userParam.password);
     }
 
     var message = "Hi "+ user.username + "<br/>"

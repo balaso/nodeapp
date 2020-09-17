@@ -6,6 +6,7 @@ const schema = new Schema({
         type: String,
         unique: true,
         required: [true, 'Name is required'],
+        minlength: [3, 'Name is too short!']
     },
     description: {
         type: String,
