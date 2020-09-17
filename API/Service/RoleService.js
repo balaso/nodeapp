@@ -19,19 +19,10 @@ async function addRole(req, res) {
 
     let roleParam = req.body;
     let pages = roleParam.pages ? roleParam.pages : []
-    await Role.findOne( { name : roleParam.name }).then( roleInfo => {
-        if(roleInfo !== null){
-            if(roleInfo.name === roleParam.name){
-                throw 'Role "' + roleParam.name + '" is already defined';
-            }
-        }
-    });
 
     roleParam.createdBy = req.userInfo.email;
 
     const role = new Role(roleParam);
-    console.log("  New ");
-    console.log(role);
 
     return await role.save().then(savedRole => {
         return savedRole;

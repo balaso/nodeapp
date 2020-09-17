@@ -1,12 +1,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
 
-const schema = new Schema({
+const RoleSchema = new Schema({
     name: {
         type: String,
         unique: true,
         required: [true, 'Name is required'],
-        minlength: [3, 'Name is too short!']
+        minlength: [4, "`{VALUE}` is shorter than the minimum allowed length (4)"],
+        maxlength: 100,
+        validate: {
+            validator: async function(name) {
+              const role = await this.constructor.findOne({ name });
+              if(role) {
+                if(this.id === role.id) {
+                  return true;
+                }
+                return false;
+              }
+              return true;
+            },
+            message: props => `The specified Role Name ${props.value} is already taken. Choose another one.`
+        }
     },
     description: {
         type: String,
@@ -40,4 +55,6 @@ const schema = new Schema({
     ]
 });
 
-Role = module.exports = mongoose.model('Role', schema);
+RoleSchema.plugin(uniqueValidator);
+
+Role = module.exports = mongoose.model('Role', RoleSchema);

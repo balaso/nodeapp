@@ -78,6 +78,10 @@ async function deleteByUserName(req, res) {
 async function update(req, res, next) {
     
     const id = req.body._id;
+    if(id === undefined ){
+        throw 'User not found. ID not available.';
+    }
+
     const userParam = req.body;
     const user = await User.findById(id);
 
@@ -88,16 +92,14 @@ async function update(req, res, next) {
         throw e;
     }
 
-    if(id === undefined ){
-        throw 'User not found';
-    }
+    
     // validate
     if (!user) { throw 'User not found';}
     if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
 
-    if (user.email !== userParam.email && await User.findOne({ username: userParam.username })) {
+    if (user.email !== userParam.email && await User.findOne({ email: userParam.email })) {
         throw 'Email "' + userParam.email + '" is already taken';
     }
 
@@ -106,23 +108,13 @@ async function update(req, res, next) {
         userParam.password = bcrypt.hashSync(userParam.password, 10);
     }
     userParam.lastModifiedDate = Date.now();
+    userParam.lastModifiedBy = req.userInfo.email
 
     // copy userParam properties to user
     Object.assign(user, userParam);
-    try{
-        user.save(function(err, updatedUser) {
-            if (err) {
-                // TODO : system crash when throw error
-                console.log(" Error occurred "+ err.message);
-                //throw new Error("xvxcv");
-            }
-            return false;
-        });
-    }catch(ex){
-        console.log("hhhh")
-        //next(new Erroerr);
-    }
-   
+    return await user.save().then(updatedUser => {
+        return updatedUser;
+    });
 }
 
 async function create(req, res) {

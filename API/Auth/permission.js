@@ -8,25 +8,28 @@ function isAllowed (...allowed){
     const isAllowed = allowed;
     let isSysRole = false;
     let isPermission = false;
-    return async (req, res, next) => {
-        const user = await getCurrentUser(req.user.sub).then(currentUser =>{
-           
+    return (req, res, next) => {
+        let currentUser = req.userInfo;
             for(var i = 0; i < currentUser.roles.length; i++) {
-                
-                let role = new Role(currentUser.roles[i]);
-                if(role.isSysRole){
-                    isSysRole = true;
-                    isPermission = true;
-                    break;
+                if(currentUser.roles.length == 0){
+                    isSysRole = false;
+                    isPermission = false;
                 }else{
-                    for(var j = 0; j < isAllowed.length; j++) {
-                       if(role.name === isAllowed[j]){
-                          isPermission = true;
-                       }
+                    let role = new Role(currentUser.roles[i]);
+                    if(role.isSysRole){
+                        isSysRole = true;
+                        isPermission = true;
+                        break;
+                    }else{
+                        for(var j = 0; j < isAllowed.length; j++) {
+                        if(role.name === isAllowed[j]){
+                            isPermission = true;
+                        }
+                        }
                     }
                 }
             }
-        });
+            
             if(isPermission === false){
                   var e = new Error(""); // e.name is 'Error'
                   e.name = 'Forbidden';

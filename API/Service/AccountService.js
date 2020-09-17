@@ -58,7 +58,6 @@ async function authenticate(req, res) {
             "link": user.activationKey
         });
     }
-    console.log(" check");
     if (user && user.comparePassword(password, user.password)) {
         
         let isSysRole = checkUserHaveSysRole(user);

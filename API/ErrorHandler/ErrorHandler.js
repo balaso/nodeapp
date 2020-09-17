@@ -7,6 +7,7 @@ function errorHandler(err, req, res, next) {
     }
 
     if (err.name === 'ValidationError') {
+        //console.log(JSON.stringify(err.errors));
         // mongoose validation error
         return res.status(400).json({ success: false, message: err.message });
     }
