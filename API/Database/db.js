@@ -1,6 +1,9 @@
 const config = require("../Config/config").defaultConfig;
 const mongoose = require('mongoose');
 
+const logger = require("../logger");
+
+
 const options = {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -82,6 +85,6 @@ async function initialize() {
         });
     }
 
-    console.log(" Admin user   --->  "+ JSON.stringify(adminUser.toJSON()));
+    logger.log("info", " Default Admin User Info "+ JSON.stringify(adminUser.toJSON()));
     console.log(" <---- Initialize Completed  ----> ")
 }

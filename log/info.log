@@ -1,24 +1,28 @@
-{"level":"info", "timestamp":"2020-09-17T13:56:22.668Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T13:56:22.669Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T13:56:22.670Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T13:56:22.670Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T13:56:22.671Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T13:56:22.671Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T13:59:06.040Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T13:59:06.041Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T13:59:06.042Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T13:59:06.042Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T13:59:06.042Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T13:59:06.042Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T13:59:49.619Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T13:59:49.621Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T13:59:49.621Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T13:59:49.621Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T13:59:49.622Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T13:59:49.622Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T14:00:32.336Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T14:00:32.339Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T14:00:32.339Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"info", "timestamp":"2020-09-17T14:00:32.339Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"warn", "timestamp":"2020-09-17T14:00:32.340Z", "message":"127.0.0.1 - there's no place like home"}
-{"level":"error", "timestamp":"2020-09-17T14:00:32.340Z", "message":"127.0.0.1 - there's no place like home"}
+{"level":"info", "timestamp":"2020-09-17 22:33:58", "message":"Server listening on port 4444"}
+{"level":"info", "timestamp":"2020-09-17 22:33:58", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}
+{"level":"info", "timestamp":"2020-09-17 22:34:02", "message":"POST/api/authenticate[object Object]"}
+{"level":"info", "timestamp":"2020-09-17 22:35:07", "message":"Server listening on port 4444"}
+{"level":"info", "timestamp":"2020-09-17 22:35:07", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}
+{"level":"info", "timestamp":"2020-09-17 22:35:09", "message":"POST  /api/authenticate   Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"}
+{"level":"info", "timestamp":"2020-09-17 22:39:59", "message":"Server listening on port 4444"}{}
+{"level":"info", "timestamp":"2020-09-17 22:39:59", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}{}
+{"level":"info", "timestamp":"2020-09-17 22:40:04", "message":"POST  /api/authenticate   Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"}{}
+{"level":"info", "timestamp":"2020-09-17 22:40:14", "message":"POST  /api/register   Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"}{}
+{"level":"info", "timestamp":"2020-09-17 22:40:14", "message":"test sample"}{"id":123}
+{"level":"warn", "timestamp":"2020-09-17 22:40:14", "message":"User validation failed: email: Please fill a valid email address, username: Error, expected `username` to be unique. Value: `balaqwewq`"}{}
+{"level":"info", "timestamp":"2020-09-17 22:43:40", "message":"Server listening on port 4444"}{}
+{"level":"info", "timestamp":"2020-09-17 22:43:40", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}{}
+{"level":"info", "timestamp":"2020-09-17 22:45:40", "message":"Server listening on port 4444"}{}
+{"level":"info", "timestamp":"2020-09-17 22:45:40", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}{}
+{"level":"info", "timestamp":"2020-09-17 22:47:18", "message":"Server listening on port 4444"}{}
+{"level":"info", "timestamp":"2020-09-17 22:47:18", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}{}
+{"level":"info", "timestamp":"2020-09-17 22:47:37", "message":"Server listening on port 4444"}{}
+{"level":"info", "timestamp":"2020-09-17 22:47:37", "message":" Default Admin User Info {"activated":true,"firstName":"Admin","lastName":null,"imageUrl":"","activationKey":"","resetKey":"","createdBy":"Admin@techbulls.com ","lastModifiedBy":"","roles":["5f633a3fd9cf7d17fc496096","5f631049ddcde56188b080fd"],"_id":"5f6311da56603c6360689bf6","username":"Admin","email":"admin@techbulls.com","langKey":"en","resetDate":"2020-09-17T07:35:54.639Z","lastModifiedDate":"2020-09-17T07:35:54.639Z","createdDate":"2020-09-17T07:35:54.639Z","__v":0}"}{}
+{"level":"info", "timestamp":"2020-09-17 22:52:36", "message":"POST  /api/register   Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"}{}
+{"level":"info", "timestamp":"2020-09-17 22:52:36", "message":"test sample"}{"id":123}
+{"level":"warn", "timestamp":"2020-09-17 22:52:36", "message":"User validation failed: email: Please fill a valid email address, username: Error, expected `username` to be unique. Value: `balaqwewq`"}{}
+{"level":"info", "timestamp":"2020-09-17 22:52:58", "message":"POST  /api/register   Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"}{}
+{"level":"info", "timestamp":"2020-09-17 22:52:58", "message":"test sample"}{"id":123}
+{"level":"warn", "timestamp":"2020-09-17 22:52:58", "message":"User validation failed: email: Please fill a valid email address, username: Error, expected `username` to be unique. Value: `balaqwewq`"}{}
+{"level":"info", "timestamp":"2020-09-17 22:53:25", "message":"POST  /api/pages   Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"}{}
+{"level":"warn", "timestamp":"2020-09-17 22:53:25", "message":"Page validation failed: url: Error, expected `url` to be unique. Value: `app/test`"}{}

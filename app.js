@@ -9,6 +9,8 @@ const errorHandlers = require("./API/ErrorHandler/ErrorHandler");
 var rfs = require('rotating-file-stream') // version 2.x
 const logger = require("./API/logger");
 
+const Logger = require("./API/LoggerService");
+const loggerService = new Logger('app');
 
 var fs = require('fs')
 var path = require('path')
@@ -22,11 +24,18 @@ var accessLogStream = rfs.createStream('access.log', {
     path: path.join(__dirname, 'log'),
 })
 
-var loggerFormat = ':id [:date[web]]" :method :url"  :status :responsetime   --> ms';
-
 const jwt = require("./API/Auth/jwt");
 
 const app = express();
+app.all('*', function(request, res, next){
+    const { method, url, headers, body } = request;
+    console.log(method);
+    console.log(url);
+    console.log(headers);
+    logger.log("info", method + "  " + url + "   " + headers['user-agent'] );
+    console.log('(2) route middleware for all method and path pattern "*", executed first and can do stuff before going next');
+    next();
+});
 app.use(morgan('combined', { stream: accessLogStream }));
 
 // use JWT auth to secure the api
@@ -47,15 +56,9 @@ const port = process.env.NODE_ENV === 'production' ? 3006 : 4444;
 
 const server = app.listen(port, function () {
     console.log('Server listening on port ' + port);
-    logger.log('silly', "127.0.0.1 - there's no place like home");
-logger.log('debug', "127.0.0.1 - there's no place like home");
-logger.log('verbose', "127.0.0.1 - there's no place like home");
-logger.log('info', "127.0.0.1 - there's no place like home");
-logger.log('warn', "127.0.0.1 - there's no place like home");
-logger.log('error', "127.0.0.1 - there's no place like home");
-logger.info("127.0.0.1 - there's no place like home");
-logger.warn("127.0.0.1 - there's no place like home");
-logger.error("127.0.0.1 - there's no place like home");
+    loggerService.info("lofff");
+    logger.log("info", "Server listening on port " + port);
 });
+
 
 module.exports = app;

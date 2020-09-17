@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const db = require("../Database/db");
 const User = db.User;
+const logger = require("../logger");
 
 var randtoken = require('rand-token');
 const jwt = require('jsonwebtoken');
@@ -14,6 +15,7 @@ module.exports = {
 };
 
 async function register(userParam) {
+    logger.info("test sample", {"id": 123});
     // validate 
     userParam.activated = false;
     // Generate a 20 character alpha-numeric token:

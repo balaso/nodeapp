@@ -1,32 +1,37 @@
-const winston = require("winston");
+const {  createLogger, format,transports } = require('winston');
+const { combine, timestamp, printf } = format;
 
-const {  format } = require('winston');
-const { combine, timestamp, label, printf } = format;
+const myFormat = printf(({ level, message, timestamp, ...metadata }) => {
+    let msg = `{"level":"${level}", "timestamp":"${timestamp}", "message":"${message}"}`;
 
-const myFormat = printf(({ level, message, label, timestamp }) => {
-    return `{"level":"${level}", "timestamp":"${timestamp}", "message":"${message}"}`;
+    if(metadata){
+      msg += JSON.stringify(metadata)
+    }
+    return msg;
 });
 
 const level = process.env.LOG_LEVEL || 'debug';
 
-const logger = new winston.createLogger({
+const logger = new createLogger({
+    prettyPrint : true,
     format: combine(
-        timestamp(),
-        myFormat
+        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        myFormat,
       ),
     transports: [
-        new winston.transports.File({ filename: 'log/error.log', level: 'error'}),
-        new winston.transports.File({ filename: 'log/info.log', level: 'info' }),
-    new winston.transports.Console({
-        format: winston.format.combine(
-          winston.format.colorize(),
-          winston.format.simple(),
+        new transports.File({ filename: 'log/error.log', level: 'error'}),
+        new transports.File({ filename: 'log/info.log', level: 'info' }),
+    new transports.Console({
+        format: combine(
+          format.colorize(),
+          format.simple(),
           myFormat
         )
       })
     ],
+    exitOnError: false,
     exceptionHandlers: [
-      new winston.transports.File({ filename: 'log/exceptions.log' })
+      new transports.File({ filename: 'log/exceptions.log' })
     ]
 });
 
