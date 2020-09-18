@@ -37,18 +37,19 @@ app.all('*', function(request, res, next){
     const { method, url, headers, body } = request;
  
     const clientIp = requestIp.getClientIp(request);
-    const { authorization } = headers;
-    if(authorization){
-        console.log("  Auth "+ authorization.replace("Bearer ", ""));
-    }
-    
-    onFinished(res, function (err) {
+
+    onFinished(res, function (err, res) {
         const ms = Date.now() - start;
+        let userId = "0";
+        if(request.userInfo !== undefined){
+            userId = request.userInfo._id;
+        }
         //console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
         let obj = {
             "method" : method,
             "url" : url,
             "IP" : clientIp,
+            "userId" : userId,
             "startTime" : start,
             "endTime": Date.now(),
             "Total Time Required" : ms + "ms"
@@ -58,7 +59,7 @@ app.all('*', function(request, res, next){
             "status" : res.statusCode
         };
         obj["response"] = responseObj;
-        logger.log("request", JSON.stringify(obj));
+        logger.log("info", JSON.stringify(obj));
         if(err){
             console.log(err);
         }
@@ -69,9 +70,6 @@ app.use(morgan('combined', { stream: accessLogStream }));
 
 // use JWT auth to secure the api
 app.use(jwt());
-
-//const router = express.Router();
-
 
 app.use('/api', require("./API/Controller/AccountController"));
 app.use('/api', require("./API/Controller/RoleController"));

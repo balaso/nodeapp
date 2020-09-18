@@ -130,6 +130,7 @@ async function create(req, res) {
     userParam.resetKey = null;
     
     userParam.createdBy = req.userInfo.email;
+    userParam.lastModifiedBy = req.userInfo.email;
 
    const user = new User(userParam);
     if (userParam.password) {

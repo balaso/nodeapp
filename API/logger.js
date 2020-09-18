@@ -1,4 +1,4 @@
-const {  createLogger, format,transports } = require('winston');
+const {  createLogger, format,transports, addColors } = require('winston');
 const { combine, timestamp, printf } = format;
 
 var myCustomLevels = {
@@ -11,6 +11,14 @@ var myCustomLevels = {
     debug: 5, 
     silly: 6,
     request: 2 
+  },
+  colors: {
+    error: "red",
+    warn: "darkred",
+    info: "black",
+    http: "green",
+    debug: "gray",
+    "request": "blue"
   }
   };
 
@@ -41,9 +49,10 @@ const logger = new createLogger({
         maxFiles: 5
       }
     ),
-      new transports.File({ filename: 'log/error.log', level: 'error'}),
-        new transports.File({ filename: 'log/info.log', level: 'info' }),
+    new transports.File({ filename: 'log/error.log', level: 'error'}),
+    new transports.File({ filename: 'log/info.log', level: 'info' }),
     new transports.Console({
+      level : "info",
         format: combine(
           format.colorize(),
           format.simple(),

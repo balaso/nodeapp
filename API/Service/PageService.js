@@ -27,6 +27,7 @@ async function addPage(req, res) {
     const pageParam = req.body;
 
     pageParam.createdBy = req.userInfo.email;
+    pageParam.lastModifiedBy = req.userInfo.email;
 
     const page = new Page(pageParam);
 

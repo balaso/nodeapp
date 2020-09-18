@@ -21,6 +21,7 @@ async function addRole(req, res) {
     let pages = roleParam.pages ? roleParam.pages : []
 
     roleParam.createdBy = req.userInfo.email;
+    roleParam.lastModifiedBy = req.userInfo.email;
 
     const role = new Role(roleParam);
 

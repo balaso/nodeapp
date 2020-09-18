@@ -22,6 +22,7 @@ async function register(userParam) {
     userParam.activationKey = randtoken.generate(20);
     
     userParam.createdBy = userParam.email;
+    userParam.lastModifiedBy = userParam.email;
 
     const user = new User(userParam);
     // hash password
