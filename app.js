@@ -11,6 +11,7 @@ const logger = require("./API/logger");
 
 const requestIp = require('request-ip');
 
+var onFinished = require('on-finished');
 
 var fs = require('fs')
 var path = require('path')
@@ -27,7 +28,12 @@ var accessLogStream = rfs.createStream('access.log', {
 const jwt = require("./API/Auth/jwt");
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.all('*', function(request, res, next){
+    const start = Date.now();
     const { method, url, headers, body } = request;
  
     const clientIp = requestIp.getClientIp(request);
@@ -35,7 +41,31 @@ app.all('*', function(request, res, next){
     if(authorization){
         console.log("  Auth "+ authorization.replace("Bearer ", ""));
     }
-    logger.log("info", method + "  " + url + "   " + headers['user-agent'] + " IP "+ clientIp);
+    
+    onFinished(res, function (err) {
+        const ms = Date.now() - start;
+        //console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
+        let obj = {
+            "method" : method,
+            "url" : url,
+            "IP" : clientIp,
+            "startTime" : start,
+            "endTime": Date.now(),
+            "Total Time Required" : ms + "ms"
+        }
+        
+        var responseObj = {
+            "status" : res.statusCode
+        };
+      
+        if(err){
+            console.log(err);
+        }
+       
+        obj["response"] = responseObj;
+        logger.log("info", JSON.stringify(obj));
+    })
+    
     next();
 });
 app.use(morgan('combined', { stream: accessLogStream }));
@@ -44,8 +74,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 app.use(jwt());
 
 //const router = express.Router();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 
 app.use('/api', require("./API/Controller/AccountController"));
 app.use('/api', require("./API/Controller/RoleController"));
