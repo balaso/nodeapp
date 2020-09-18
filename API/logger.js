@@ -33,11 +33,17 @@ const logger = new createLogger({
         myFormat,
       ),
     transports: [
-      new transports.File({ filename: 'log/requestInfo.log', level: 'request'}),
-        new transports.File({ filename: 'log/error.log', level: 'error'}),
+      new transports.File({ 
+        filename: 'log/requestInfo.log',
+        level: 'request',
+        json: true,
+        maxsize: 5242880, //5MB
+        maxFiles: 5
+      }
+    ),
+      new transports.File({ filename: 'log/error.log', level: 'error'}),
         new transports.File({ filename: 'log/info.log', level: 'info' }),
     new transports.Console({
-      level: 'info',
         format: combine(
           format.colorize(),
           format.simple(),

@@ -57,15 +57,12 @@ app.all('*', function(request, res, next){
         var responseObj = {
             "status" : res.statusCode
         };
-      
+        obj["response"] = responseObj;
+        logger.log("request", JSON.stringify(obj));
         if(err){
             console.log(err);
         }
-       
-        obj["response"] = responseObj;
-        logger.log("info", JSON.stringify(obj));
     })
-    
     next();
 });
 app.use(morgan('combined', { stream: accessLogStream }));
