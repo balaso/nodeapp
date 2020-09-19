@@ -19,6 +19,14 @@ function errorHandler(err, req, res, next) {
         // jwt authentication error
         return res.status(401).json({ success: false, message: 'Invalid Token' });
     }
+    
+    if (err.name === 'EmailNotFound') {
+        return res.status(400).json({ success: false, message: 'Email address not registered' });
+    }
+    if (err.name === 'InvalidRequestBody') {
+        return res.status(400).json({ success: false, message: 'Request body is Invalid.' });
+    }
+    
     if(err.name === "ActivationKey"){
        return res.status(500).json({
             success: false, 

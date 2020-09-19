@@ -13,6 +13,8 @@ const requestIp = require('request-ip');
 
 var onFinished = require('on-finished');
 
+const requestLogService = require("./API/Service/RequestLogService");
+
 var fs = require('fs')
 var path = require('path')
 
@@ -52,14 +54,14 @@ app.all('*', function(request, res, next){
             "userId" : userId,
             "startTime" : start,
             "endTime": Date.now(),
-            "Total Time Required" : ms + "ms"
+            "TotalTimeRequired" : ms
         }
         
         var responseObj = {
             "status" : res.statusCode
         };
         obj["response"] = responseObj;
-        logger.log("info", JSON.stringify(obj));
+        requestLogService.addRequestLog(obj);
         if(err){
             console.log(err);
         }

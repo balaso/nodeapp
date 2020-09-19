@@ -8,6 +8,7 @@ var regEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,6
 const UserSchema = new Schema({
     username : {
         type: String,
+        index: true,
         unique: true,
         required: [true, 'Username is required'],
         minlength: [4, "`{VALUE}` is shorter than the minimum allowed length (4)"],
@@ -29,6 +30,7 @@ const UserSchema = new Schema({
     email: {
         type: String,
         unique: true,
+        index: true,
         trim: true,
         lowercase: true,
         required: [true, 'E-Mail is required'],
@@ -58,10 +60,12 @@ const UserSchema = new Schema({
     },
     firstName: {
         type: String,
+        index: true,
         default: null
     }, 
     lastName: {
         type: String,
+        index: true,
         default: null
     },
     langKey: {
@@ -85,10 +89,12 @@ const UserSchema = new Schema({
     },
     createdBy: {
         type: String,
+        index: true,
         default: ""
     },
     lastModifiedBy: {
         type: String,
+        index: true,
         default: ""
     },
     lastModifiedDate: {
@@ -98,6 +104,14 @@ const UserSchema = new Schema({
     createdDate: {
         type: Date,
         default: Date.now
+    },
+    passwordUpdatedDate: {
+        type: Date,
+        default: null
+    },
+    loginDate: {
+        type: Date,
+        default: null
     },
     roles: [
         { 
@@ -117,9 +131,27 @@ UserSchema.methods.comparePassword = function(password, comparePassword) {
     return bcrypt.compareSync(password, comparePassword)
 };
 
+UserSchema.methods.generateToken=function(cb){
+    var user =this;
+    var token = jwt.sign(user._id ,confiq.SECRET);
+    
+    user.token = token;
+
+    user.save(function(err,user){
+        if(err) return cb(err);
+        cb(null,user);
+    })
+}
+
 UserSchema.methods.generateHashPassword = function(password){
    return bcrypt.hashSync(password, 10);
 }
 UserSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('User', UserSchema);
+User = module.exports = mongoose.model('User', UserSchema);
+
+User.ensureIndexes(function(err){
+    if(err){
+        console.log(err);
+    }
+});

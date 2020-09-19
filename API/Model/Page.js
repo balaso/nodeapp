@@ -29,15 +29,18 @@ const PageSchema = new Schema({
     },
     url :{
         type: String,
+        index: true,
         unique: true,
         required: [true, 'URL is required']
     },
     createdBy: {
         type: String,
+        index: true,
         default: ""
     },
     lastModifiedBy: {
         type: String,
+        index: true,
         default: ""
     },
     lastModifiedDate: {
@@ -53,3 +56,9 @@ const PageSchema = new Schema({
 PageSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 Page = module.exports = mongoose.model('Page', PageSchema);
+
+Page.ensureIndexes(function(err){
+    if(err){
+        console.log(err);
+    }
+});

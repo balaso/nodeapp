@@ -63,8 +63,6 @@ async function getUserRole(req, res){
             return { success : true, data: result};
         });
 
-        console.log(result);
-        
     return result;
 }
 

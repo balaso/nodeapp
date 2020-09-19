@@ -7,15 +7,18 @@ var randtoken = require('rand-token');
 const jwt = require('jsonwebtoken');
 const config = require("../Config/config").defaultConfig;
 
+const DateDiff = require("../DateDiff");
 
 module.exports = {
     register,
     authenticate,
-    activateUser
+    activateUser,
+    requestPasswordReset,
+    finishPasswordReset,
+    changePassword
 };
 
 async function register(userParam) {
-    logger.info("test sample", {"id": 123});
     // validate 
     userParam.activated = false;
     // Generate a 20 character alpha-numeric token:
@@ -71,6 +74,8 @@ async function authenticate(req, res) {
         const { hash, ...userWithoutHash } = userObj;
 
         const id_token = jwt.sign({ sub : user.id}, config.jwt.secret, { expiresIn: '7d' });
+        user.loginDate = Date.now();
+        user.save();
         
         return {
             ...userWithoutHash,
@@ -113,4 +118,66 @@ function checkUserHaveSysRole(currentUser){
         }
     }
     return isSysRole;
+}
+
+async function requestPasswordReset(req, res) {
+    const { email } = req.body;
+    const user = await User.findOne({ "email": email});
+    if(user){
+        // TODO : send mail
+        user.resetKey = randtoken.generate(20);
+        user.resetDate = Date.now();
+        await user.save();
+        return {"message":"Reset mail Send", "key" : user.resetKey };
+    }else{
+        var e = new Error("");
+        e.name = "EmailNotFound";
+        throw e;
+    }
+}
+
+
+async function finishPasswordReset(req, res) {
+    var KeyAndPasswordVM = req.body;
+    const user = await User.findOne({resetKey: KeyAndPasswordVM.key} ).select('-hash');
+    
+    if(user){
+        if(user.comparePassword( KeyAndPasswordVM.newPassword, user.password)){
+            throw "Old Password and new Password are same.";
+        }
+        var diff = new DateDiff(Date.now(), user.resetDate);
+        if(diff.hours() < 2){
+           user.password = user.generateHashPassword(KeyAndPasswordVM.newPassword);
+           user.resetKey = "";
+           user.resetDate = null;
+           user.lastModifiedBy = user.email;
+           user.lastModifiedDate = Date.now();
+           user.passwordUpdatedDate = Date.now();
+           await user.save();
+        }else{
+            user.resetKey = randtoken.generate(20);
+            user.resetDate = Date.now();
+            await user.save();
+            return {"status": false, "message":"Reset mail Send"};
+        }
+    }else{
+        throw "Reset key not match with our DB.";
+    }   
+}
+
+async function changePassword(req, res) {
+    var passwordVM = req.body;
+    const user = await User.findById(req.userInfo._id);
+    if(user.comparePassword( passwordVM.currentPassword, user.password)){
+        if(user.comparePassword( passwordVM.newPassword, user.password)){
+            throw "Old Password and new Password are same.";
+        }
+        user.password = bcrypt.hashSync(passwordVM.newPassword, 10);
+        user.lastModifiedBy = req.userInfo.email;
+        user.lastModifiedDate = Date.now();
+        user.passwordUpdatedDate = Date.now();
+        return await user.save();
+    }else{
+         res.status(400).json({ success: false, message: "Old Password not match" });
+    }
 }

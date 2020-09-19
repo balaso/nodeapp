@@ -6,6 +6,7 @@ const RoleSchema = new Schema({
     name: {
         type: String,
         unique: true,
+        index: true,
         required: [true, 'Name is required'],
         minlength: [4, "`{VALUE}` is shorter than the minimum allowed length (4)"],
         maxlength: 100,
@@ -33,10 +34,12 @@ const RoleSchema = new Schema({
     },
     createdBy: {
         type: String,
+        index: true,
         default: ""
     },
     lastModifiedBy: {
         type: String,
+        index: true,
         default: ""
     },
     lastModifiedDate: {
@@ -58,3 +61,9 @@ const RoleSchema = new Schema({
 RoleSchema.plugin(uniqueValidator);
 
 Role = module.exports = mongoose.model('Role', RoleSchema);
+
+Role.ensureIndexes(function(err){
+    if(err){
+        console.log(err);
+    }
+});

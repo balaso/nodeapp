@@ -28,7 +28,8 @@ mongoose.Promise = global.Promise;
 db = module.exports = {
     User: require("../Model/User"),
     Role: require("../Model/Role"),
-    Page: require("../Model/Page")
+    Page: require("../Model/Page"),
+    RequestLog :require("../Model/RequestLog")
 };
 
 initialize();

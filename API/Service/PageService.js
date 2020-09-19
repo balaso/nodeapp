@@ -1,6 +1,7 @@
 const db = require("../Database/db");
 const Page = db.Page;
 var ObjectId = require('mongodb').ObjectID;
+const paginate = require("../Helper/Pagination");
 
 const UserDTO = "id login firstName lastName email imageUrl activated langKey createdBy createdDate lastModifiedBy lastModifiedDate authorities";
 
@@ -20,7 +21,19 @@ async function getById(id) {
 }
 
 async function getAvailablePages(req, res) {
-    return await Page.find().select('-__v');
+    var paginateParam = paginate.paginationParam(req.query);
+
+    const result = Page.aggregate([
+        { $match : {}},
+        {"$sort" : paginateParam.sortCondition },
+          {
+            $facet: {
+              data : [{ "$skip": paginateParam.skip },{ "$limit": paginateParam.pageSize }],
+              total: [ { $count: 'total'} ]
+            }
+          }
+        ])
+        return result;
 }
 
 async function addPage(req, res) {
@@ -143,8 +156,6 @@ async function getPageWiseRoles(req, res, next) {
 
 
 async function getUserPageWise(req, res, next) {
-    console.log("user");
-    
     const { pageName } = req.query;
     let match = {};
     if(pageName !== undefined){
