@@ -94,7 +94,6 @@ const UserSchema = new Schema({
     },
     lastModifiedBy: {
         type: String,
-        index: true,
         default: ""
     },
     lastModifiedDate: {
