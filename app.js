@@ -79,6 +79,10 @@ app.use('/api', require("./API/Controller/UserController"));
 app.use('/api', require("./API/Controller/PageController"));
 
 app.use(errorHandlers);
+
+app.get('/', function(request, res, next){
+    res.send("Application works");
+});
 // start server
 const port = process.env.NODE_ENV === 'production' ? 3006 : 4444;
 
