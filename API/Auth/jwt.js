@@ -15,7 +15,6 @@ function jwt() {
             "/api/authenticate",
             "/api/register",
             "/api/activate",
-            "/api/roles",
             "/api/account/reset-password/init",
             "/api/account/reset-password/finish"
         ]

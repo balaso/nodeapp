@@ -48,6 +48,7 @@ function getPageWiseRoles(req, res, next) {
 }
 
 function getUserPageWise(req, res, next) {
+    console.log(req.userInfo);
     pageService.getUserPageWise(req, res)
         .then((result) => res.json( { success: true, data : result }))
         .catch(err => next(err));

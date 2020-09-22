@@ -10,6 +10,10 @@ function isAllowed (...allowed){
     let isPermission = false;
     return (req, res, next) => {
         let currentUser = req.userInfo;
+            if(currentUser.roles.length == 0){
+                isSysRole = false;
+                isPermission = false;
+            }
             for(var i = 0; i < currentUser.roles.length; i++) {
                 if(currentUser.roles.length == 0){
                     isSysRole = false;
@@ -22,14 +26,13 @@ function isAllowed (...allowed){
                         break;
                     }else{
                         for(var j = 0; j < isAllowed.length; j++) {
-                        if(role.name === isAllowed[j]){
-                            isPermission = true;
-                        }
+                            if(role.name === isAllowed[j]){
+                                isPermission = true;
+                            }
                         }
                     }
                 }
             }
-            
             if(isPermission === false){
                   var e = new Error(""); // e.name is 'Error'
                   e.name = 'Forbidden';
